@@ -184,7 +184,7 @@ func (a *App) runBatch(ctx context.Context, items []string, delayMs int) {
 	}
 
 	a.mu.Lock()
-	a.batchCancel = nil
+	a.cancelBatch()
 	a.mu.Unlock()
 
 	a.emit("batch:done", nil)
