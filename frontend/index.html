@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Scanner Simulator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scanner Simulator</title>
+  <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
-<div id="app"></div>
-<script src="./src/main.js" type="module"></script>
+  <header>
+    <h1>Scanner Simulator</h1>
+  </header>
+
+  <main>
+    <!-- Server Panel -->
+    <section class="panel" id="panel-server">
+      <h2>Server</h2>
+      <div class="row">
+        <label for="port-input">Port</label>
+        <input id="port-input" type="number" value="9000" min="1" max="65535" />
+        <button id="btn-start" class="btn-primary">Start Listening</button>
+        <button id="btn-stop" class="btn-danger" disabled>Stop</button>
+      </div>
+      <div class="status-row">
+        <span id="status-dot" class="dot dot-idle"></span>
+        <span id="status-text">Idle</span>
+      </div>
+    </section>
+
+    <!-- Manual Send Panel -->
+    <section class="panel" id="panel-manual">
+      <h2>Manual Send</h2>
+      <div class="row">
+        <label for="barcode-input">Barcode</label>
+        <input id="barcode-input" type="text" placeholder="Enter barcode value" disabled />
+        <button id="btn-send" class="btn-primary" disabled>Send</button>
+      </div>
+    </section>
+
+    <!-- Batch Mode Panel -->
+    <section class="panel" id="panel-batch">
+      <h2>Batch Mode</h2>
+      <div class="row">
+        <label for="delay-input">Delay (ms)</label>
+        <input id="delay-input" type="number" value="500" min="0" />
+        <button id="btn-batch-start" class="btn-primary" disabled>Start</button>
+        <button id="btn-batch-stop" class="btn-danger" disabled>Stop</button>
+      </div>
+      <textarea id="batch-textarea" placeholder="One barcode per line" rows="5" disabled></textarea>
+      <div id="batch-progress-row" class="progress-row hidden">
+        <span id="batch-counter">0 / 0</span>
+        <progress id="batch-bar" value="0" max="100"></progress>
+      </div>
+    </section>
+
+    <!-- Activity Log Panel -->
+    <section class="panel" id="panel-log">
+      <div class="log-header">
+        <h2>Activity Log</h2>
+        <button id="btn-clear" class="btn-secondary">Clear</button>
+      </div>
+      <ul id="log-list"></ul>
+    </section>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
