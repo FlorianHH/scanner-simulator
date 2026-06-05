@@ -36,6 +36,7 @@ func TestSendFraming(t *testing.T) {
 
 	want := append([]byte{0x02}, append([]byte(payload), 0x03)...)
 	got := make([]byte, len(want))
+	conn.SetReadDeadline(time.Now().Add(500 * time.Millisecond))
 	if _, err := io.ReadFull(conn, got); err != nil {
 		t.Fatalf("ReadFull: %v", err)
 	}
@@ -95,6 +96,7 @@ func TestStopListeningCancelsBatch(t *testing.T) {
 	if err := app.StartListening(port); err != nil {
 		t.Fatalf("StartListening: %v", err)
 	}
+	defer app.StopListening()
 
 	conn, err := net.Dial("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
@@ -102,6 +104,7 @@ func TestStopListeningCancelsBatch(t *testing.T) {
 	}
 	defer conn.Close()
 
+	// Give the accept goroutine time to run and set app.conn.
 	time.Sleep(50 * time.Millisecond)
 
 	// Start a long-running batch (10s delay per item — will be cancelled).
