@@ -26,6 +26,10 @@ const batchProgressRow = document.getElementById('batch-progress-row');
 const batchCounter     = document.getElementById('batch-counter');
 const batchBar         = document.getElementById('batch-bar');
 
+const loopCheckbox    = document.getElementById('loop-checkbox');
+const loopTimesLabel  = document.getElementById('loop-times-label');
+const loopTimesInput  = document.getElementById('loop-times-input');
+
 const logList          = document.getElementById('log-list');
 const btnClear         = document.getElementById('btn-clear');
 
@@ -47,6 +51,8 @@ function applyState(next) {
 
   batchTextarea.disabled = !connected;
   btnBatchStart.disabled = !connected;
+  loopCheckbox.disabled  = !connected;
+  loopTimesInput.disabled = !connected;
 
   if (idle || state === 'listening') {
     btnBatchStop.disabled = true;
@@ -111,11 +117,27 @@ btnBatchStart.addEventListener('click', async () => {
     return;
   }
 
+  let loops = 1;
+  if (loopCheckbox.checked) {
+    const raw = loopTimesInput.value.trim();
+    if (raw === '') {
+      loops = 0;
+    } else {
+      const n = parseInt(raw, 10);
+      if (isNaN(n) || n < 0) {
+        appendLog('ERR', 'Invalid loop count');
+        return;
+      }
+      loops = n; // 0 means infinite
+    }
+  }
+
   try {
-    await StartBatch(items, delay);
+    await StartBatch(items, delay, loops);
     btnBatchStart.disabled = true;
     btnBatchStop.disabled = false;
-    batchCounter.textContent = `0 / ${items.length}`;
+    const cycleTotal = loops === 0 ? '∞' : String(loops);
+    batchCounter.textContent = `Cycle 1 / ${cycleTotal} — 0 / ${items.length}`;
     batchBar.value = 0;
     batchBar.max = items.length;
     batchProgressRow.classList.remove('hidden');
@@ -126,6 +148,12 @@ btnBatchStart.addEventListener('click', async () => {
 
 btnBatchStop.addEventListener('click', () => {
   StopBatch();
+});
+
+loopCheckbox.addEventListener('change', () => {
+  const show = loopCheckbox.checked;
+  loopTimesLabel.classList.toggle('hidden', !show);
+  loopTimesInput.classList.toggle('hidden', !show);
 });
 
 // --- Activity log ---
@@ -184,8 +212,9 @@ EventsOn('log:entry', ({ time, level, message }) => {
   logList.prepend(li);
 });
 
-EventsOn('batch:progress', ({ index, total }) => {
-  batchCounter.textContent = `${index} / ${total}`;
+EventsOn('batch:progress', ({ index, total, cycle, totalCycles }) => {
+  const cycleTotal = totalCycles === 0 ? '∞' : String(totalCycles);
+  batchCounter.textContent = `Cycle ${cycle} / ${cycleTotal} — ${index} / ${total}`;
   batchBar.value = index;
   batchBar.max = total;
 });
