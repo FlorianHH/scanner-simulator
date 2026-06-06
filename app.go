@@ -146,6 +146,10 @@ func (a *App) StartBatch(items []string, delayMs int, loops int) error {
 		a.mu.Unlock()
 		return fmt.Errorf("no client connected")
 	}
+	if loops < 0 {
+		a.mu.Unlock()
+		return fmt.Errorf("loops must be >= 0")
+	}
 	a.cancelBatch()
 	ctx, cancel := context.WithCancel(context.Background())
 	a.batchCancel = cancel
