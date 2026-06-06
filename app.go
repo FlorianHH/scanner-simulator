@@ -140,7 +140,7 @@ func (a *App) Send(data string) error {
 }
 
 // StartBatch sends items sequentially with delayMs between each, starting immediately.
-func (a *App) StartBatch(items []string, delayMs int) error {
+func (a *App) StartBatch(items []string, delayMs int, loops int) error {
 	a.mu.Lock()
 	if a.conn == nil {
 		a.mu.Unlock()
@@ -151,36 +151,47 @@ func (a *App) StartBatch(items []string, delayMs int) error {
 	a.batchCancel = cancel
 	a.mu.Unlock()
 
-	go a.runBatch(ctx, items, delayMs)
+	go a.runBatch(ctx, items, delayMs, loops)
 	return nil
 }
 
-func (a *App) runBatch(ctx context.Context, items []string, delayMs int) {
+func (a *App) runBatch(ctx context.Context, items []string, delayMs int, loops int) {
 	delay := time.Duration(delayMs) * time.Millisecond
 
-	for i, item := range items {
-		if i > 0 {
-			select {
-			case <-ctx.Done():
+	for cycle := 1; ; cycle++ {
+		for i, item := range items {
+			if cycle == 1 && i == 0 {
+				select {
+				case <-ctx.Done():
+					a.emit("batch:done", nil)
+					return
+				default:
+				}
+			} else {
+				select {
+				case <-ctx.Done():
+					a.emit("batch:done", nil)
+					return
+				case <-time.After(delay):
+				}
+			}
+
+			if err := a.Send(item); err != nil {
+				a.logEntry("ERR", fmt.Sprintf("Batch send failed: %v", err))
 				a.emit("batch:done", nil)
 				return
-			case <-time.After(delay):
 			}
-		} else {
-			select {
-			case <-ctx.Done():
-				a.emit("batch:done", nil)
-				return
-			default:
-			}
+			a.emit("batch:progress", map[string]int{
+				"index":       i + 1,
+				"total":       len(items),
+				"cycle":       cycle,
+				"totalCycles": loops,
+			})
 		}
 
-		if err := a.Send(item); err != nil {
-			a.logEntry("ERR", fmt.Sprintf("Batch send failed: %v", err))
-			a.emit("batch:done", nil)
-			return
+		if loops != 0 && cycle >= loops {
+			break
 		}
-		a.emit("batch:progress", map[string]int{"index": i + 1, "total": len(items)})
 	}
 
 	a.mu.Lock()
