@@ -58,6 +58,13 @@ main {
   color: #3c3c43;
 }
 
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
 input[type="text"],
 input[type="number"] {
   border: 1px solid #c7c7cc;
