@@ -208,3 +208,5 @@ progress::-moz-progress-bar { background: #007aff; border-radius: 3px; }
 #log-list li .log-level.SENT { color: #007aff; }
 #log-list li .log-level.INFO { color: #34c759; }
 #log-list li .log-level.ERR  { color: #ff3b30; }
+
+.hidden { display: none; }
