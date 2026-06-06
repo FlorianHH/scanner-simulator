@@ -6,8 +6,8 @@ export function Send(arg1) {
   return window['go']['main']['App']['Send'](arg1);
 }
 
-export function StartBatch(arg1, arg2) {
-  return window['go']['main']['App']['StartBatch'](arg1, arg2);
+export function StartBatch(arg1, arg2, arg3) {
+  return window['go']['main']['App']['StartBatch'](arg1, arg2, arg3);
 }
 
 export function StartListening(arg1) {
