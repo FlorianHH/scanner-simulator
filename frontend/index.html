@@ -46,6 +46,15 @@
         <button id="btn-batch-start" class="btn-primary" disabled>Start</button>
         <button id="btn-batch-stop" class="btn-danger" disabled>Stop</button>
       </div>
+      <div class="row" id="loop-row">
+        <label class="checkbox-label">
+          <input type="checkbox" id="loop-checkbox" disabled />
+          Loop
+        </label>
+        <label for="loop-times-input" id="loop-times-label" class="hidden">Times</label>
+        <input id="loop-times-input" type="number" min="0" placeholder="∞"
+               class="hidden" disabled />
+      </div>
       <textarea id="batch-textarea" placeholder="One barcode per line" rows="5" disabled></textarea>
       <div id="batch-progress-row" class="progress-row hidden">
         <span id="batch-counter">0 / 0</span>
