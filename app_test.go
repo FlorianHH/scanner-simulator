@@ -161,6 +161,14 @@ func TestBatchLoopsMultipleTimes(t *testing.T) {
 			}
 		}
 	}
+
+	// Confirm no extra frames arrive (batch terminated after loops cycles).
+	extra := make([]byte, 1)
+	conn.SetReadDeadline(time.Now().Add(100 * time.Millisecond))
+	n, err := conn.Read(extra)
+	if n > 0 || err == nil {
+		t.Errorf("unexpected data after batch completion: n=%d err=%v", n, err)
+	}
 }
 
 func TestBatchInfiniteLoopStopsOnCancel(t *testing.T) {
