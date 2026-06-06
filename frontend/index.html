@@ -4,17 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scanner Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
   <header>
-    <h1>Scanner Simulator</h1>
+    <div class="header-inner">
+      <div class="header-brand">
+        <svg class="brand-icon" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0"  y="0" width="2" height="20" fill="currentColor"/>
+          <rect x="4"  y="0" width="1" height="20" fill="currentColor"/>
+          <rect x="7"  y="0" width="3" height="20" fill="currentColor"/>
+          <rect x="12" y="0" width="1" height="20" fill="currentColor"/>
+          <rect x="15" y="0" width="2" height="20" fill="currentColor"/>
+          <rect x="19" y="0" width="4" height="20" fill="currentColor"/>
+          <rect x="25" y="0" width="1" height="20" fill="currentColor"/>
+          <rect x="27" y="0" width="1" height="20" fill="currentColor"/>
+        </svg>
+        <h1>Scanner Simulator</h1>
+      </div>
+      <span class="header-badge">TCP</span>
+    </div>
   </header>
 
   <main>
     <!-- Server Panel -->
     <section class="panel" id="panel-server">
-      <h2>Server</h2>
+      <h2><span class="section-num">01</span>Server</h2>
       <div class="row">
         <label for="port-input">Port</label>
         <input id="port-input" type="number" value="9000" min="1" max="65535" />
@@ -29,7 +47,7 @@
 
     <!-- Manual Send Panel -->
     <section class="panel" id="panel-manual">
-      <h2>Manual Send</h2>
+      <h2><span class="section-num">02</span>Manual Send</h2>
       <div class="row">
         <label for="barcode-input">Barcode</label>
         <input id="barcode-input" type="text" placeholder="Enter barcode value" disabled />
@@ -39,7 +57,7 @@
 
     <!-- Batch Mode Panel -->
     <section class="panel" id="panel-batch">
-      <h2>Batch Mode</h2>
+      <h2><span class="section-num">03</span>Batch Mode</h2>
       <div class="row">
         <label for="delay-input">Delay (ms)</label>
         <input id="delay-input" type="number" value="500" min="0" />
@@ -65,8 +83,8 @@
     <!-- Activity Log Panel -->
     <section class="panel" id="panel-log">
       <div class="log-header">
-        <h2>Activity Log</h2>
-        <button id="btn-clear" class="btn-secondary">Clear</button>
+        <h2><span class="section-num">04</span>Activity Log</h2>
+        <button id="btn-clear" class="btn-ghost">Clear</button>
       </div>
       <ul id="log-list"></ul>
     </section>
