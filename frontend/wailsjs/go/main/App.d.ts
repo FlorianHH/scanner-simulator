@@ -3,7 +3,7 @@
 
 export function Send(arg1:string):Promise<void>;
 
-export function StartBatch(arg1:Array<string>,arg2:number):Promise<void>;
+export function StartBatch(arg1:Array<string>,arg2:number,arg3:number):Promise<void>;
 
 export function StartListening(arg1:number):Promise<void>;
 
