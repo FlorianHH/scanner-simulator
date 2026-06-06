@@ -123,12 +123,16 @@ btnBatchStart.addEventListener('click', async () => {
     if (raw === '') {
       loops = 0;
     } else {
-      const n = parseInt(raw, 10);
-      if (isNaN(n) || n < 0) {
+      if (!/^\d+$/.test(raw)) {
         appendLog('ERR', 'Invalid loop count');
         return;
       }
-      loops = n; // 0 means infinite
+      const n = parseInt(raw, 10);
+      if (n <= 0) {
+        appendLog('ERR', 'Invalid loop count');
+        return;
+      }
+      loops = n;
     }
   }
 
