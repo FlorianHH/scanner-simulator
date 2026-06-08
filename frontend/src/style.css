@@ -335,6 +335,11 @@ button:disabled {
   margin-left: auto;
 }
 
+/* Push Start/Stop to the right in range controls */
+.range-controls #btn-range-start {
+  margin-left: auto;
+}
+
 /* ─── Textarea ───────────────────────────────────────────── */
 
 textarea {
@@ -383,13 +388,16 @@ textarea:disabled {
 
 .progress-row.hidden { display: none; }
 
-#batch-counter {
+#batch-counter,
+#range-counter {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--accent);
   white-space: nowrap;
-  min-width: 150px;
 }
+
+#batch-counter { min-width: 150px; }
+#range-counter { min-width: 80px; }
 
 progress {
   flex: 1;
