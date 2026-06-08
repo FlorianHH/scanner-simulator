@@ -1,29 +1,27 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:          #0d0d11;
-  --surface:     #12121a;
-  --surface-2:   #181822;
-  --border:      #21212e;
-  --border-2:    #2c2c3e;
-  --text:        #e4e4f0;
-  --text-2:      #7878a0;
-  --text-3:      #3e3e58;
-  --accent:      #22d3ee;
-  --accent-dim:  rgba(34, 211, 238, 0.08);
-  --accent-glow: rgba(34, 211, 238, 0.25);
-  --green:       #4ade80;
-  --green-dim:   rgba(74, 222, 128, 0.08);
-  --green-glow:  rgba(74, 222, 128, 0.3);
-  --amber:       #fb923c;
-  --amber-dim:   rgba(251, 146, 60, 0.08);
-  --amber-glow:  rgba(251, 146, 60, 0.3);
-  --red:         #f87171;
-  --red-dim:     rgba(248, 113, 113, 0.08);
-  --radius:      9px;
-  --radius-sm:   6px;
-  --font-ui:     'Outfit', system-ui, sans-serif;
-  --font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+  --bg:         #eef0f6;
+  --surface:    #ffffff;
+  --surface-2:  #f5f6fa;
+  --border:     #dcdde8;
+  --border-2:   #c8cadb;
+  --text:       #16161f;
+  --text-2:     #5c5c78;
+  --text-3:     #a8a8bc;
+  --accent:     #4f6ef7;
+  --accent-dim: rgba(79, 110, 247, 0.1);
+  --green:      #16a34a;
+  --green-dim:  rgba(22, 163, 74, 0.1);
+  --amber:      #b45309;
+  --amber-dot:  #f59e0b;
+  --red:        #dc2626;
+  --red-dim:    rgba(220, 38, 38, 0.08);
+  --radius:     8px;
+  --radius-sm:  5px;
+  --font-ui:    'Outfit', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 body {
@@ -33,18 +31,16 @@ body {
   color: var(--text);
   min-height: 100vh;
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0);
+    radial-gradient(circle at 1px 1px, rgba(0, 0, 60, 0.055) 1px, transparent 0);
   background-size: 20px 20px;
 }
 
 /* ─── Header ─────────────────────────────────────────────── */
 
 header {
-  background: rgba(18, 18, 26, 0.92);
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 10px 20px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -68,7 +64,6 @@ header {
   width: 20px;
   height: 14px;
   color: var(--accent);
-  opacity: 0.9;
   flex-shrink: 0;
 }
 
@@ -109,11 +104,13 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px 18px;
-  transition: border-color 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .panel:hover {
   border-color: var(--border-2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .panel h2 {
@@ -172,7 +169,6 @@ input[type="number"] {
   flex: 1;
   min-width: 80px;
   transition: border-color 0.15s, box-shadow 0.15s;
-  -webkit-appearance: none;
 }
 
 input[type="text"]::placeholder,
@@ -183,11 +179,12 @@ input[type="number"]::placeholder {
 input[type="text"]:focus,
 input[type="number"]:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-dim);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  background: var(--surface);
 }
 
 input:disabled {
-  opacity: 0.3;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
@@ -221,35 +218,37 @@ button {
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, opacity 0.15s, transform 0.08s;
+  transition: background 0.12s, opacity 0.12s, box-shadow 0.12s, transform 0.08s;
   letter-spacing: 0.01em;
 }
 
 button:active:not(:disabled) {
-  transform: scale(0.96);
+  transform: scale(0.97);
 }
 
 button:disabled {
-  opacity: 0.25;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 .btn-primary {
   background: var(--accent);
-  color: #050d10;
+  color: #ffffff;
   font-weight: 600;
 }
 .btn-primary:hover:not(:disabled) {
-  background: #67e8f9;
+  background: #3d5ae5;
+  box-shadow: 0 2px 8px rgba(79, 110, 247, 0.35);
 }
 
 .btn-danger {
   background: var(--red-dim);
   color: var(--red);
-  border: 1px solid rgba(248, 113, 113, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.2);
 }
 .btn-danger:hover:not(:disabled) {
-  background: rgba(248, 113, 113, 0.15);
+  background: rgba(220, 38, 38, 0.14);
+  border-color: rgba(220, 38, 38, 0.35);
 }
 
 .btn-ghost {
@@ -285,7 +284,10 @@ button:disabled {
 .dot::after {
   content: '';
   position: absolute;
-  inset: -4px;
+  top: -4px;
+  right: -4px;
+  bottom: -4px;
+  left: -4px;
   border-radius: 50%;
   opacity: 0;
 }
@@ -295,25 +297,23 @@ button:disabled {
 }
 
 .dot-listening {
-  background: var(--amber);
-  box-shadow: 0 0 6px var(--amber-glow);
+  background: var(--amber-dot);
 }
 .dot-listening::after {
-  border: 1px solid var(--amber);
+  border: 1.5px solid var(--amber-dot);
   animation: ring-pulse 1.6s ease-out infinite;
 }
 
 .dot-connected {
   background: var(--green);
-  box-shadow: 0 0 8px var(--green-glow);
 }
 .dot-connected::after {
-  border: 1px solid var(--green);
+  border: 1.5px solid var(--green);
   animation: ring-pulse 2.2s ease-out infinite;
 }
 
 @keyframes ring-pulse {
-  0%   { opacity: 0.7; transform: scale(1); }
+  0%   { opacity: 0.6; transform: scale(1); }
   100% { opacity: 0;   transform: scale(2.8); }
 }
 
@@ -321,7 +321,6 @@ button:disabled {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-2);
-  letter-spacing: 0.01em;
 }
 
 /* ─── Textarea ───────────────────────────────────────────── */
@@ -348,11 +347,12 @@ textarea::placeholder {
 
 textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-dim);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  background: var(--surface);
 }
 
 textarea:disabled {
-  opacity: 0.3;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
@@ -381,25 +381,25 @@ textarea:disabled {
 
 progress {
   flex: 1;
-  height: 3px;
+  height: 4px;
   border-radius: 2px;
   appearance: none;
   border: none;
-  background: var(--border-2);
+  background: var(--border);
   overflow: hidden;
 }
 
 progress::-webkit-progress-bar {
-  background: var(--border-2);
+  background: var(--border);
   border-radius: 2px;
 }
 progress::-webkit-progress-value {
-  background: linear-gradient(90deg, var(--accent) 0%, var(--green) 100%);
+  background: var(--accent);
   border-radius: 2px;
   transition: width 0.25s ease;
 }
 progress::-moz-progress-bar {
-  background: linear-gradient(90deg, var(--accent), var(--green));
+  background: var(--accent);
   border-radius: 2px;
 }
 
