@@ -7,6 +7,8 @@ export function StartBatch(arg1:Array<string>,arg2:number,arg3:number):Promise<v
 
 export function StartListening(arg1:number):Promise<void>;
 
+export function StartRange(arg1:string,arg2:number,arg3:number,arg4:boolean):Promise<void>;
+
 export function StopBatch():Promise<void>;
 
 export function StopListening():Promise<void>;

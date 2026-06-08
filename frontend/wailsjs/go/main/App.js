@@ -14,6 +14,10 @@ export function StartListening(arg1) {
   return window['go']['main']['App']['StartListening'](arg1);
 }
 
+export function StartRange(arg1, arg2, arg3, arg4) {
+  return window['go']['main']['App']['StartRange'](arg1, arg2, arg3, arg4);
+}
+
 export function StopBatch() {
   return window['go']['main']['App']['StopBatch']();
 }
