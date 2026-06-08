@@ -77,6 +77,7 @@ function applyState(next) {
     batchProgressRow.classList.add('hidden');
     btnRangeStop.disabled = true;
     rangeProgressRow.classList.add('hidden');
+    activeMode = null;
   }
 
   const dotClass = { idle: 'dot-idle', listening: 'dot-listening', connected: 'dot-connected' }[state];
@@ -160,6 +161,7 @@ btnBatchStart.addEventListener('click', async () => {
     await StartBatch(items, delay, loops);
     activeMode = 'batch';
     btnBatchStart.disabled = true;
+    btnRangeStart.disabled = true;
     btnBatchStop.disabled = false;
     const cycleTotal = loops === 0 ? '∞' : String(loops);
     batchCounter.textContent = `Cycle 1 / ${cycleTotal} — 0 / ${items.length}`;
@@ -196,6 +198,7 @@ btnRangeStart.addEventListener('click', async () => {
     await StartRange(start, count, delay, checkDigit);
     activeMode = 'range';
     btnRangeStart.disabled = true;
+    btnBatchStart.disabled = true;
     btnRangeStop.disabled = false;
     rangeCounter.textContent = `0 / ${count}`;
     rangeBar.value = 0;
@@ -290,10 +293,12 @@ EventsOn('batch:done', () => {
     btnRangeStart.disabled = false;
     btnRangeStop.disabled = true;
     rangeProgressRow.classList.add('hidden');
+    btnBatchStart.disabled = false;
   } else {
     btnBatchStart.disabled = false;
     btnBatchStop.disabled = true;
     batchProgressRow.classList.add('hidden');
+    btnRangeStart.disabled = false;
   }
   activeMode = null;
 });
