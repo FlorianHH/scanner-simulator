@@ -1,6 +1,13 @@
 package main
 
-import "testing"
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"net"
+	"testing"
+	"time"
+)
 
 func TestSSCCCheckDigit(t *testing.T) {
 	tests := []struct {
@@ -57,4 +64,65 @@ func TestGenerateRange(t *testing.T) {
 			t.Errorf("got %v, want [42]", items)
 		}
 	})
+}
+
+func TestStartRangeSendsCorrectFrames(t *testing.T) {
+	app := NewApp()
+	const port = 19881
+	if err := app.StartListening(port); err != nil {
+		t.Fatalf("StartListening: %v", err)
+	}
+	defer app.StopListening()
+
+	conn, err := net.Dial("tcp", fmt.Sprintf(":%d", port))
+	if err != nil {
+		t.Fatalf("Dial: %v", err)
+	}
+	defer conn.Close()
+	time.Sleep(50 * time.Millisecond)
+
+	if err := app.StartRange("1", 3, 0, true); err != nil {
+		t.Fatalf("StartRange: %v", err)
+	}
+
+	want := []string{"000000000000000017", "000000000000000024", "000000000000000031"}
+	for _, w := range want {
+		frame := append([]byte{0x02}, append([]byte(w), 0x03)...)
+		got := make([]byte, len(frame))
+		conn.SetReadDeadline(time.Now().Add(500 * time.Millisecond))
+		if _, err := io.ReadFull(conn, got); err != nil {
+			t.Fatalf("ReadFull for %q: %v", w, err)
+		}
+		if !bytes.Equal(got, frame) {
+			t.Errorf("frame: got %v, want %v", got, frame)
+		}
+	}
+
+	// Drain: no extra frames
+	conn.SetReadDeadline(time.Now().Add(100 * time.Millisecond))
+	extra := make([]byte, 1)
+	if _, err := conn.Read(extra); err == nil {
+		t.Error("expected no extra frames after range completes")
+	}
+}
+
+func TestStartRangeValidation(t *testing.T) {
+	app := NewApp()
+	if err := app.StartRange("abc", 5, 0, false); err == nil {
+		t.Error("expected error for non-numeric start")
+	}
+	if err := app.StartRange("1", 0, 0, false); err == nil {
+		t.Error("expected error for count=0")
+	}
+	if err := app.StartRange("1", -1, 0, false); err == nil {
+		t.Error("expected error for negative count")
+	}
+	// overflow: start=99999999999999998 + count=5 exceeds 17-digit max
+	if err := app.StartRange("99999999999999998", 5, 0, true); err == nil {
+		t.Error("expected error for range overflow")
+	}
+	// no client connected — StartBatch will return error
+	if err := app.StartRange("1", 5, 0, false); err == nil {
+		t.Error("expected error when no client connected")
+	}
 }
