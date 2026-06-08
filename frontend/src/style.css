@@ -323,6 +323,18 @@ button:disabled {
   color: var(--text-2);
 }
 
+/* Fixed-width number input (batch controls) */
+.input-narrow {
+  flex: none;
+  width: 90px;
+  min-width: unset;
+}
+
+/* Push Start/Stop to the right in batch controls */
+.batch-controls #btn-batch-start {
+  margin-left: auto;
+}
+
 /* ─── Textarea ───────────────────────────────────────────── */
 
 textarea {
