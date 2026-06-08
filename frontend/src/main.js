@@ -4,6 +4,7 @@ import {
   Send,
   StartBatch,
   StopBatch,
+  StartRange,
 } from '../wailsjs/go/main/App';
 
 import { EventsOn } from '../wailsjs/runtime/runtime';
@@ -30,11 +31,22 @@ const loopCheckbox    = document.getElementById('loop-checkbox');
 const loopTimesLabel  = document.getElementById('loop-times-label');
 const loopTimesInput  = document.getElementById('loop-times-input');
 
+const rangeStart       = document.getElementById('range-start');
+const rangeCount       = document.getElementById('range-count');
+const rangeCheckDigit  = document.getElementById('range-check-digit');
+const rangeDelay       = document.getElementById('range-delay');
+const btnRangeStart    = document.getElementById('btn-range-start');
+const btnRangeStop     = document.getElementById('btn-range-stop');
+const rangeProgressRow = document.getElementById('range-progress-row');
+const rangeCounter     = document.getElementById('range-counter');
+const rangeBar         = document.getElementById('range-bar');
+
 const logList          = document.getElementById('log-list');
 const btnClear         = document.getElementById('btn-clear');
 
 // --- State: idle | listening | connected ---
 let state = 'idle';
+let activeMode = null; // 'batch' | 'range' | null
 
 function applyState(next) {
   state = next;
@@ -54,9 +66,17 @@ function applyState(next) {
   loopCheckbox.disabled  = !connected;
   loopTimesInput.disabled = !connected;
 
+  rangeStart.disabled      = !connected;
+  rangeCount.disabled      = !connected;
+  rangeCheckDigit.disabled = !connected;
+  rangeDelay.disabled      = !connected;
+  btnRangeStart.disabled   = !connected;
+
   if (idle || state === 'listening') {
     btnBatchStop.disabled = true;
     batchProgressRow.classList.add('hidden');
+    btnRangeStop.disabled = true;
+    rangeProgressRow.classList.add('hidden');
   }
 
   const dotClass = { idle: 'dot-idle', listening: 'dot-listening', connected: 'dot-connected' }[state];
@@ -138,6 +158,7 @@ btnBatchStart.addEventListener('click', async () => {
 
   try {
     await StartBatch(items, delay, loops);
+    activeMode = 'batch';
     btnBatchStart.disabled = true;
     btnBatchStop.disabled = false;
     const cycleTotal = loops === 0 ? '∞' : String(loops);
@@ -151,6 +172,41 @@ btnBatchStart.addEventListener('click', async () => {
 });
 
 btnBatchStop.addEventListener('click', () => {
+  StopBatch();
+});
+
+btnRangeStart.addEventListener('click', async () => {
+  const start = rangeStart.value.trim();
+  if (!/^\d+$/.test(start)) {
+    appendLog('ERR', 'Invalid start number');
+    return;
+  }
+  const count = parseInt(rangeCount.value, 10);
+  if (isNaN(count) || count <= 0) {
+    appendLog('ERR', 'Invalid count');
+    return;
+  }
+  const delay = parseInt(rangeDelay.value, 10);
+  if (isNaN(delay) || delay < 0) {
+    appendLog('ERR', 'Invalid delay value');
+    return;
+  }
+  const checkDigit = rangeCheckDigit.checked;
+  try {
+    await StartRange(start, count, delay, checkDigit);
+    activeMode = 'range';
+    btnRangeStart.disabled = true;
+    btnRangeStop.disabled = false;
+    rangeCounter.textContent = `0 / ${count}`;
+    rangeBar.value = 0;
+    rangeBar.max = count;
+    rangeProgressRow.classList.remove('hidden');
+  } catch (err) {
+    appendLog('ERR', String(err));
+  }
+});
+
+btnRangeStop.addEventListener('click', () => {
   StopBatch();
 });
 
@@ -217,16 +273,29 @@ EventsOn('log:entry', ({ time, level, message }) => {
 });
 
 EventsOn('batch:progress', ({ index, total, cycle, totalCycles }) => {
-  const cycleTotal = totalCycles === 0 ? '∞' : String(totalCycles);
-  batchCounter.textContent = `Cycle ${cycle} / ${cycleTotal} — ${index} / ${total}`;
-  batchBar.value = index;
-  batchBar.max = total;
+  if (activeMode === 'range') {
+    rangeCounter.textContent = `${index} / ${total}`;
+    rangeBar.value = index;
+    rangeBar.max = total;
+  } else {
+    const cycleTotal = totalCycles === 0 ? '∞' : String(totalCycles);
+    batchCounter.textContent = `Cycle ${cycle} / ${cycleTotal} — ${index} / ${total}`;
+    batchBar.value = index;
+    batchBar.max = total;
+  }
 });
 
 EventsOn('batch:done', () => {
-  btnBatchStart.disabled = false;
-  btnBatchStop.disabled = true;
-  batchProgressRow.classList.add('hidden');
+  if (activeMode === 'range') {
+    btnRangeStart.disabled = false;
+    btnRangeStop.disabled = true;
+    rangeProgressRow.classList.add('hidden');
+  } else {
+    btnBatchStart.disabled = false;
+    btnBatchStop.disabled = true;
+    batchProgressRow.classList.add('hidden');
+  }
+  activeMode = null;
 });
 
 // Initial state
