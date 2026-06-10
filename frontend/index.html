@@ -50,7 +50,7 @@
       <h2><span class="section-num">02</span>Manual Send</h2>
       <div class="row">
         <label for="barcode-input">Barcode</label>
-        <input id="barcode-input" type="text" placeholder="Enter barcode value" disabled />
+        <input id="barcode-input" type="text" placeholder="Enter barcode value" />
         <button id="btn-send" class="btn-primary" disabled>Send</button>
       </div>
     </section>
@@ -62,16 +62,16 @@
         <label for="delay-input">Delay (ms)</label>
         <input id="delay-input" type="number" value="500" min="0" class="input-narrow" />
         <label class="checkbox-label">
-          <input type="checkbox" id="loop-checkbox" disabled />
+          <input type="checkbox" id="loop-checkbox" />
           Loop
         </label>
         <label for="loop-times-input" id="loop-times-label" class="hidden">Times</label>
         <input id="loop-times-input" type="number" min="0" placeholder="∞"
-               class="input-narrow hidden" disabled />
+               class="input-narrow hidden" />
         <button id="btn-batch-start" class="btn-primary" disabled>Start</button>
         <button id="btn-batch-stop" class="btn-danger" disabled>Stop</button>
       </div>
-      <textarea id="batch-textarea" placeholder="One barcode per line" rows="5" disabled></textarea>
+      <textarea id="batch-textarea" placeholder="One barcode per line" rows="5"></textarea>
       <div id="batch-progress-row" class="progress-row hidden">
         <span id="batch-counter">0 / 0</span>
         <progress id="batch-bar" value="0" max="100"></progress>
@@ -84,12 +84,12 @@
       <div class="row range-controls">
         <label for="range-start">Start</label>
         <input id="range-start" type="text" inputmode="numeric"
-               pattern="[0-9]*" placeholder="34001234500000000" disabled />
+               pattern="[0-9]*" placeholder="34001234500000000" />
         <label for="range-count">Count</label>
         <input id="range-count" type="number" min="1" value="100"
-               class="input-narrow" disabled />
+               class="input-narrow" />
         <label class="checkbox-label">
-          <input type="checkbox" id="range-check-digit" checked disabled />
+          <input type="checkbox" id="range-check-digit" checked />
           Check digit
         </label>
         <button id="btn-range-start" class="btn-primary" disabled>Start</button>
@@ -98,7 +98,7 @@
       <div class="row">
         <label for="range-delay">Delay (ms)</label>
         <input id="range-delay" type="number" value="0" min="0"
-               class="input-narrow" disabled />
+               class="input-narrow" />
       </div>
       <div id="range-progress-row" class="progress-row hidden">
         <span id="range-counter">0 / 0</span>
