@@ -58,18 +58,10 @@ function applyState(next) {
   portInput.disabled     = !idle;
   btnStop.disabled       = idle;
 
-  barcodeInput.disabled  = !connected;
   btnSend.disabled       = !connected;
 
-  batchTextarea.disabled = !connected;
   btnBatchStart.disabled = !connected;
-  loopCheckbox.disabled  = !connected;
-  loopTimesInput.disabled = !connected;
 
-  rangeStart.disabled      = !connected;
-  rangeCount.disabled      = !connected;
-  rangeCheckDigit.disabled = !connected;
-  rangeDelay.disabled      = !connected;
   btnRangeStart.disabled   = !connected;
 
   if (idle || state === 'listening') {
