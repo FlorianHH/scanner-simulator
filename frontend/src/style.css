@@ -343,14 +343,11 @@ button:disabled {
   min-width: unset;
 }
 
-/* Push Start/Stop to the right in batch controls */
-.batch-controls #btn-batch-start {
-  margin-left: auto;
-}
-
-/* Push Start/Stop to the right in range controls */
-.range-controls #btn-range-start {
-  margin-left: auto;
+/* Dedicated action row: Start/Stop pinned to the right, consistent across panels */
+.actions {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  margin-top: 12px;
 }
 
 /* ─── Textarea ───────────────────────────────────────────── */
