@@ -1,19 +1,39 @@
-# README
+# Scanner Simulator
 
-## About
+A desktop app that simulates a barcode scanner over TCP. It listens on a configurable port, waits for a middleware client to connect, and sends barcodes wrapped in STX/ETX framing — the protocol used by most industrial barcode scanners.
 
-This is the official Wails Vanilla template.
+## Features
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+- **Manual Send** — type a barcode and send it instantly
+- **Batch Mode** — send a list of barcodes with a configurable delay between scans, with optional looping
+- **Range Mode** — generate and send a sequential range of SSCC-18 barcodes (with GS1 check digit)
+- Live activity log with timestamps
+- Auto-reconnect when the client disconnects
 
-## Live Development
+## Download
 
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
+Pre-built binaries for Windows, macOS, and Linux are available on the [Releases](../../releases) page.
 
-## Building
+## Usage
 
-To build a redistributable, production mode package, use `wails build`.
+1. Enter the TCP port your middleware listens on and click **Start Listening**
+2. Start your middleware (or use `nc 127.0.0.1 9000` to test)
+3. Once connected, use Manual Send, Batch, or Range mode to send barcodes
+
+Each barcode is sent as `STX + data + ETX` (`0x02 ... 0x03`).
+
+## Building from Source
+
+**Prerequisites:** Go 1.22+, Node.js 18+, [Wails CLI](https://wails.io/docs/gettingstarted/installation)
+
+```bash
+wails build
+```
+
+For development with hot reload:
+
+```bash
+wails dev
+```
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for details.
