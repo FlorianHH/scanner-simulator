@@ -1,0 +1,23 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tile" x1="160" y1="160" x2="864" y2="864" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5f7cff"/>
+      <stop offset="1" stop-color="#3d5ae5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded indigo tile (transparent corners) -->
+  <rect x="112" y="112" width="800" height="800" rx="180" fill="url(#tile)"/>
+
+  <!-- Barcode mark: same bar pattern as the app header, scaled & centered -->
+  <g fill="#ffffff">
+    <rect x="232" y="312" width="40" height="400"/>
+    <rect x="312" y="312" width="20" height="400"/>
+    <rect x="372" y="312" width="60" height="400"/>
+    <rect x="472" y="312" width="20" height="400"/>
+    <rect x="532" y="312" width="40" height="400"/>
+    <rect x="612" y="312" width="80" height="400"/>
+    <rect x="732" y="312" width="20" height="400"/>
+    <rect x="772" y="312" width="20" height="400"/>
+  </g>
+</svg>
