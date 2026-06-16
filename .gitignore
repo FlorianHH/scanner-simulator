@@ -5,3 +5,5 @@ frontend/package.json.md5
 scanner-simulator
 .superpowers/
 .DS_Store
+.playwright-mcp/
+/*.png
